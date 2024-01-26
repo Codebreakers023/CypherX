@@ -1,3 +1,1 @@
-"VoiceAI.exe"
-"login.txt"
-"INTERNSHIP OPPERTUNITY.csv"
+"VoiceAI.exe" "login.txt" "INTERNSHIP OPPERTUNITY.csv"
