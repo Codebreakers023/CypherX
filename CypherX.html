@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malicious App Analyzer</title>
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #main-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #logo {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+        #output {
+            max-width: 100%;
+            height: auto;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            overflow: auto;
+        }
+
+        #status {
+            margin-top: 10px;
+            font-weight: bold;
+            color: green;
+        }
+
+        #timer {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        #copyright {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        #upload-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-container">
+        <img id="logo" src="CODEBREAKERS.png" alt="CodeBreakers Logo">
+        <button id="analyze-button">Analyze</button>
+        <textarea id="output" readonly>Please upload an application...</textarea>
+        <p id="status">Status: Ready</p>
+        <p id="timer"></p>
+        <p id="copyright">Copyright © 2023 CodeBreakers023. All rights reserved.</p>
+
+        <div id="upload-area" onclick="document.getElementById('fileInput').click();">
+            <p>Drag & Drop or <label for="fileInput">Browse</label> to upload an application</p>
+            <input type="file" id="fileInput" style="display: none;" />
+        </div>
+    </div>
+
+    <script>
+        function handleFileUpload(file) {
+            const outputTextarea = document.getElementById('output');
+            outputTextarea.value = `File uploaded: ${file.name}\n`;
+            checkMalicious(file.name);
+        }
+
+        function checkMalicious(appName) {
+            const outputTextarea = document.getElementById('output');
+            fetch('https://raw.githubusercontent.com/HuzaifaPallan/text/main/malicious_apps.txt?token=GHSAT0AAAAAACMZ5LPBLHPYZBVJVWBALBNCZNTSODQ')
+                .then(response => response.text())
+                .then(maliciousAppsList => {
+                    const isMalicious = maliciousAppsList.toLowerCase().includes(appName.toLowerCase());
+
+                    if (isMalicious) {
+                        outputTextarea.value += `This application is malicious\n`;
+                        document.getElementById('status').innerText = 'Status: Malicious';
+                    } else {
+                        outputTextarea.value += 'This application is safe';
+                        document.getElementById('status').innerText = 'Status: Safe';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching malicious apps list:', error);
+                });
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            handleFileUpload(file);
+        });
+
+        document.getElementById('analyze-button').addEventListener('click', function () {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                handleFileUpload(file);
+                document.getElementById('status').innerText = 'Analysis in progress...';
+            } else {
+                document.getElementById('status').innerText = 'Please upload a file for analysis.';
+            }
+        });
+    </script>
+</body>
+</html>
