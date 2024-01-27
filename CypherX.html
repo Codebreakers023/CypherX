@@ -116,7 +116,7 @@
 
         function checkMalicious(appName) {
             const outputTextarea = document.getElementById('output');
-            fetch('https://raw.githubusercontent.com/HuzaifaPallan/text/main/malicious_apps.txt?token=GHSAT0AAAAAACMZ5LPBLHPYZBVJVWBALBNCZNTSODQ')
+            fetch('https://raw.githubusercontent.com/Codebreakers023/CypherX/main/malicious_apps.txt')
                 .then(response => response.text())
                 .then(maliciousAppsList => {
                     const isMalicious = maliciousAppsList.toLowerCase().includes(appName.toLowerCase());
